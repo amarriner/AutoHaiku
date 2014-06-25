@@ -63,7 +63,7 @@ while len(haiku) < 3:
       if len(w) > 0:
 
          # If we don't know the number of syllables in this word, look it up on Wordnik
-         if w not in syllables:
+         if w not in syllables.keys():
             lookups = lookups + 1
             request = requests.get(wordnik_api_url.replace("<WORD>", w))
             result = json.loads(request.content)
@@ -96,7 +96,7 @@ for line in haiku:
    l = ""
 
    for w in line.split(" "):
-      if w in pretty:
+      if w in pretty.keys():
          l = l + pretty[w] + " "
       else:
          l = l + w + " "
