@@ -39,6 +39,11 @@ else:
    syllables = dict()
 f.close()
 
+# Get a list of words that require some kind of capitalization or punctuation
+f = open(pwd + 'pretty.json')
+pretty = json.loads(f.read())
+f.close
+
 lookups = 0
 corpus_list = []
 
@@ -50,8 +55,8 @@ for sentence in re.findall(p, corpus):
    corpus_list.append(c)
 
 haiku = []
-random.shuffle(corpus_list)
-for sentence in corpus_list:
+while len(haiku) < 3:
+   sentence = random.choice(corpus_list)
    total = 0
 
    for w in sentence.split(" "):
@@ -84,13 +89,19 @@ for sentence in corpus_list:
    # Append line to the haiku list if it's the appropriate number of syllables
    if (len(haiku) == 0 and total == 5) or (len(haiku) == 1 and total == 7) or (len(haiku) == 2 and total == 5):
       haiku.append(sentence)
-   if len(haiku) == 3:
-      break
 
 # Assemble the haiku list into a string with capitalization
 tweet = ""
 for line in haiku:
-   tweet = tweet + line.capitalize().strip() + "\n"
+   l = ""
+
+   for w in line.split(" "):
+      if w in pretty:
+         l = l + pretty[w] + " "
+      else:
+         l = l + w + " "
+
+   tweet = tweet + l.strip().capitalize() + "\n"
 
 # Connect to Twitter
 api = twitter.Api(keys.consumer_key, keys.consumer_secret, keys.access_token, keys.access_token_secret)
